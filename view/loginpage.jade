@@ -1,0 +1,36 @@
+!!! 5
+html
+  head
+    script(type='text/javascript', src='http://code.jquery.com/jquery-latest.min.js')
+  body
+    script(src='/socket.io/socket.io.js')
+    #LoginBox
+      form#loginForm(method='POST')
+        | Your Name:
+        input#uname(type='text', name='uname')
+        br
+        | Your Password:
+        input#password(type='text')
+        br
+        input#login(type='button', value='Login')
+        #userError
+        script
+          jQuery(function($){
+          var socket = io.connect();
+          var $loginForm = $('#loginForm');
+          var $userName= $('#uname');
+          var $password= $('#password');
+          $("#login").click(function(e){
+          var loginData = {"userName": $userName.val(), "password": $password.val()};
+          socket.emit('login User',loginData ,function(data){
+          if(data){
+          $("#loginForm").attr("action","/homepage");
+          $('#loginForm').submit();
+          }else{
+          //e.preventDefault();
+          $("#userError").html("User is not found");
+          alert("sdfjhj");
+          }
+          });
+          });
+          });
